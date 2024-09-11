@@ -6,10 +6,12 @@ let state = true;
 
 const appTimer = () => {
   const sessionAmount = Number.parseInt(session.textContent);
+  const btn = document.querySelector('.btn-start');
 
   if (state) {
     state = false;
     let totalSeconds = sessionAmount * 60;
+    btn.textContent = 'Pause';
 
     const updateSeconds = () => {
       const minute = document.querySelector('.minutes');
@@ -33,12 +35,18 @@ const appTimer = () => {
       }
     };
     myInterval = setInterval(updateSeconds, 1000);
+    motivationInterval = setInterval(displayPhrase, 10000);
   } else {
-    alert('Session has already started.');
+    state = true;
+    btn.textContent = 'Start';
+    clearInterval(myInterval);
+    clearInterval(motivationInterval);
   }
 };
 
 const motivationalPhrases = [
+  'You got this!',
+  'You are capable of amazing things',
   'Progress over perfection',
   'Focus on one task at a time',
   'Small steps lead to big results',
@@ -49,47 +57,20 @@ const motivationalPhrases = [
   'You’ve got this',
   'Make it happen',
   'Keep moving forward',
+  'You are unstoppable',
+  'You are stronger than you think',
+  'You are capable of more than you know',
 ];
 
+let messageIndex = 0;
+var message = document.getElementById('message');
+var typewriter = new Typewriter(message, {
+  loop: true,
+});
 const displayPhrase = () => {
-  var message = document.getElementById('message');
-  const initialText = message.textContent;
-  var typewriter = new Typewriter(message, {
-    loop: true,
-  });
-
-  typewriter
-    .typeString(motivationalPhrases[0])
-    .pauseFor(2500)
-    .deleteAll()
-    .typeString(motivationalPhrases[1])
-    .pauseFor(2500)
-    .deleteAll()
-    .typeString(motivationalPhrases[2])
-    .pauseFor(2500)
-    .deleteAll()
-    .typeString(motivationalPhrases[3])
-    .pauseFor(2500)
-    .deleteAll()
-    .typeString(motivationalPhrases[4])
-    .pauseFor(2500)
-    .deleteAll()
-    .typeString(motivationalPhrases[5])
-    .pauseFor(2500)
-    .deleteAll()
-    .typeString(motivationalPhrases[6])
-    .pauseFor(2500)
-    .deleteAll()
-    .typeString(motivationalPhrases[7])
-    .pauseFor(2500)
-    .deleteAll()
-    .typeString(motivationalPhrases[8])
-    .pauseFor(2500)
-    .deleteAll()
-    .typeString(motivationalPhrases[9])
-    .pauseFor(2500)
-    .deleteAll()
-    .start();
+  typewriter.deleteAll().typeString(motivationalPhrases[messageIndex]).start();
+  
+  messageIndex = (messageIndex + 1) % motivationalPhrases.length;
 };
 
 startBtn.addEventListener('click', () => {
