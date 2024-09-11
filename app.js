@@ -4,14 +4,56 @@ const session = document.querySelector('.minutes');
 let myInterval = null;
 let state = true;
 
+const motivationalPhrases = [
+  'You got this!',
+  'You are capable of amazing things',
+  'Progress over perfection',
+  'Focus on one task at a time',
+  'Small steps lead to big results',
+  'You’re closer than you think',
+  'Stay in the moment',
+  'Finish strong',
+  'Your effort matters',
+  'You’ve got this',
+  'Make it happen',
+  'Keep moving forward',
+  'You are unstoppable',
+  'You are stronger than you think',
+  'You are capable of more than you know',
+];
+
+let messageIndex = 0;
+const message = document.getElementById('message');
+let typewriter = new Typewriter(message, {
+  loop: false,
+});
+
+const displayPhrase = () => {
+      typewriter.deleteAll().pauseFor(1500).typeString(motivationalPhrases[messageIndex]).pauseFor(1500).start();
+      messageIndex = (messageIndex + 1) % motivationalPhrases.length;
+    };
+  
+
+/*const displayPhrase = () => {
+  typewriter
+    .deleteAll()
+    .pauseFor(1500)
+    .typeString(motivationalPhrases[messageIndex])
+    .pauseFor(1500)
+    .callFunction(() => {
+      messageIndex = (messageIndex + 1) % motivationalPhrases.length;
+      displayPhrase();
+    })
+    .start();
+};*/
+
 const appTimer = () => {
   const sessionAmount = Number.parseInt(session.textContent);
-  const btn = document.querySelector('.btn-start');
 
   if (state) {
     state = false;
     let totalSeconds = sessionAmount * 60;
-    btn.textContent = 'Pause';
+    startBtn.textContent = 'Pause';
 
     const updateSeconds = () => {
       const minute = document.querySelector('.minutes');
@@ -35,45 +77,15 @@ const appTimer = () => {
       }
     };
     myInterval = setInterval(updateSeconds, 1000);
-    motivationInterval = setInterval(displayPhrase, 10000);
+    motivationInterval = setInterval(displayPhrase, 1000);
+    //displayPhrase();
   } else {
     state = true;
-    btn.textContent = 'Start';
+    startBtn.textContent = 'Start';
     clearInterval(myInterval);
-    clearInterval(motivationInterval);
   }
-};
-
-const motivationalPhrases = [
-  'You got this!',
-  'You are capable of amazing things',
-  'Progress over perfection',
-  'Focus on one task at a time',
-  'Small steps lead to big results',
-  'You’re closer than you think',
-  'Stay in the moment',
-  'Finish strong',
-  'Your effort matters',
-  'You’ve got this',
-  'Make it happen',
-  'Keep moving forward',
-  'You are unstoppable',
-  'You are stronger than you think',
-  'You are capable of more than you know',
-];
-
-let messageIndex = 0;
-var message = document.getElementById('message');
-var typewriter = new Typewriter(message, {
-  loop: true,
-});
-const displayPhrase = () => {
-  typewriter.deleteAll().typeString(motivationalPhrases[messageIndex]).start();
-  
-  messageIndex = (messageIndex + 1) % motivationalPhrases.length;
 };
 
 startBtn.addEventListener('click', () => {
   appTimer();
-  displayPhrase();
 });
