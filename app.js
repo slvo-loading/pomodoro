@@ -1,11 +1,13 @@
 const bells = new Audio('./bell.wav');
 const startBtn = document.querySelector('.btn-start');
+const resetBtn = document.querySelector('.btn-reset');
 const session = document.querySelector('.minutes');
 let myInterval = null;
+let motivationInterval = null;
 let state = true;
 
 const motivationalPhrases = [
-  'You got this!',
+  'You got this',
   'You are capable of amazing things',
   'Progress over perfection',
   'Focus on one task at a time',
@@ -74,6 +76,8 @@ const appTimer = () => {
       if (minutesLeft === 0 && secondsLeft === 0) {
         bells.play();
         clearInterval(myInterval);
+        state = true;
+        startBtn.textContent = '';
       }
     };
     myInterval = setInterval(updateSeconds, 1000);
@@ -83,9 +87,21 @@ const appTimer = () => {
     state = true;
     startBtn.textContent = 'Start';
     clearInterval(myInterval);
+    clearInterval(motivationInterval);
   }
 };
 
-startBtn.addEventListener('click', () => {
-  appTimer();
-});
+const resetTimer = () => {
+  clearInterval(myInterval);
+  clearInterval(motivationInterval);
+  const minute = document.querySelector('.minutes');
+  const seconds = document.querySelector('.seconds');
+  minute.textContent = '25';
+  seconds.textContent = '00';
+  state = true;
+  startBtn.textContent = 'Start';
+};
+
+startBtn.addEventListener('click', appTimer);
+resetBtn.addEventListener('click', resetTimer);
+
